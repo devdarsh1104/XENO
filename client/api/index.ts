@@ -241,15 +241,11 @@ app.get('/api/download/:sessionId/:fileType', (req, res) => {
       return res.status(404).json({ error: 'Requested file does not exist.' });
     }
 
-    const stat = fs.statSync(filePath);
-    res.writeHead(200, {
-      'Content-Type': fileType === 'zip' ? 'application/zip' : 'text/csv',
-      'Content-Length': stat.size,
-      'Content-Disposition': `attachment; filename="${downloadName}"`
-    });
-
-    const readStream = fs.createReadStream(filePath);
-    readStream.pipe(res);
+    const fileBuffer = fs.readFileSync(filePath);
+    res.setHeader('Content-Type', fileType === 'zip' ? 'application/zip' : 'text/csv');
+    res.setHeader('Content-Length', fileBuffer.length);
+    res.setHeader('Content-Disposition', `attachment; filename="${downloadName}"`);
+    return res.status(200).send(fileBuffer);
   } catch (error: any) {
     console.error('Download error:', error);
     res.status(500).json({ error: 'Failed to download file', details: error.message });
@@ -260,7 +256,11 @@ app.get('/api/download/:sessionId/:fileType', (req, res) => {
 app.get('/api/sample-csv', (req, res) => {
   const sampleFilePath = path.join(__dirname, '../../sample_transactions.csv');
   if (fs.existsSync(sampleFilePath)) {
-    res.download(sampleFilePath, 'sample_transactions.csv');
+    const fileBuffer = fs.readFileSync(sampleFilePath);
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Length', fileBuffer.length);
+    res.setHeader('Content-Disposition', 'attachment; filename="sample_transactions.csv"');
+    return res.status(200).send(fileBuffer);
   } else {
     // Fallback if not found, write a minimal inline version
     const csvContent = 
