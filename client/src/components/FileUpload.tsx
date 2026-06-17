@@ -1,6 +1,6 @@
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import axios from 'axios';
-import { UploadCloud, FileType, Settings, Download, AlertCircle } from 'lucide-react';
+import { UploadCloud, FileType, Download, AlertCircle } from 'lucide-react';
 import type { ValidationSummary } from '../types';
 
 interface FileUploadProps {
