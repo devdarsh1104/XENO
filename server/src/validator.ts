@@ -294,7 +294,7 @@ export function validateTransactions(rows: TransactionRow[]): RowValidationResul
     if (isEmpty(row.payment_status)) {
       addError('payment_status', 'Payment status is required');
     } else {
-      status, statusClean = safeString(row.payment_status).toUpperCase();
+      statusClean = safeString(row.payment_status).toUpperCase();
       if (!VALIDATION_CONFIG.allowedPaymentStatuses.includes(statusClean)) {
         addError('payment_status', `Payment status must be one of: ${VALIDATION_CONFIG.allowedPaymentStatuses.join(', ')}`);
       }
