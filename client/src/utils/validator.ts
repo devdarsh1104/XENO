@@ -48,53 +48,49 @@ export const validateCSV = async (
               return '';
             };
 
-            // 1. Order ID (Mandatory, unique)
+            // 1. Order ID (Optional dynamic check)
             const orderId = getVal(row, 'order_id', 'orderid', 'order id');
-            if (!orderId) {
-              pushError('order_id', 'Missing order_id');
-            } else if (uniqueOrderIds.has(orderId)) {
-              pushError('order_id', `Duplicate order_id: ${orderId}`);
-            } else {
-              uniqueOrderIds.add(orderId);
+            if (orderId) {
+              if (uniqueOrderIds.has(orderId)) {
+                pushError('order_id', `Duplicate order_id: ${orderId}`);
+              } else {
+                uniqueOrderIds.add(orderId);
+                row.order_id = orderId;
+              }
             }
 
-            // 2. Customer Phone (Valid Indian number format: 10 digits, starts with 6-9, unique)
+            // 2. Customer Phone (Optional dynamic check)
             let phone = getVal(row, 'customer_phone', 'customer phone', 'phone', 'phone_number');
             let countryCode = getVal(row, 'country_code', 'country code', 'countrycode');
-            if (phone.startsWith('+91')) {
-              phone = phone.replace('+91', '');
-              countryCode = '+91';
-            }
-            if (!/^[6-9]\d{9}$/.test(phone)) {
-              pushError('customer_phone', 'Invalid Indian phone number format', phone);
-            } else if (uniqueCustomerPhones.has(phone)) {
-              pushError('customer_phone', `Duplicate customer_phone: ${phone}`, phone);
-            } else {
-              uniqueCustomerPhones.add(phone);
-              // Store normalized values back with exactly matching dashboard column keys
-              row.customer_phone = phone; 
-              row.country_code = countryCode || '+91'; 
+            if (phone) {
+              if (phone.startsWith('+91')) {
+                phone = phone.replace('+91', '');
+                countryCode = '+91';
+              }
+              if (!/^[6-9]\d{9}$/.test(phone)) {
+                pushError('customer_phone', 'Invalid Indian phone number format', phone);
+              } else if (uniqueCustomerPhones.has(phone)) {
+                pushError('customer_phone', `Duplicate customer_phone: ${phone}`, phone);
+              } else {
+                uniqueCustomerPhones.add(phone);
+                row.customer_phone = phone; 
+                row.country_code = countryCode || '+91'; 
+              }
             }
 
-            // 3. Signup Date (Format: YYYY-MM-DD or DD/MM/YYYY or MM/DD/YYYY)
-            const rawSignupDate = getVal(row, 'signup_date', 'signup date', 'signupdate', 'date');
+            // 3. Dates (Optional dynamic check)
+            const rawSignupDate = getVal(row, 'signup_date', 'signup date', 'signupdate', 'date', 'order_date');
             if (rawSignupDate) {
               const d1 = /^\d{4}-\d{2}-\d{2}$/.test(rawSignupDate);
               const d2 = /^\d{2}\/\d{2}\/\d{4}$/.test(rawSignupDate);
               if (!d1 && !d2) {
-                // Try parsing with Date object to see if it's generally valid
                 const parsedDate = new Date(rawSignupDate);
                 if (isNaN(parsedDate.getTime())) {
                    pushError('signup_date', 'Does not match allowed formats: YYYY-MM-DD, DD/MM/YYYY, MM/DD/YYYY, or valid Date/Time string', rawSignupDate);
                 }
               }
-            } else {
-               pushError('signup_date', 'Missing signup_date');
+              row.signup_date = rawSignupDate;
             }
-
-            // Ensure React can read the fields when rendering
-            row.order_id = orderId;
-            row.signup_date = rawSignupDate;
 
             if (errors.length > 0) {
               invalidRows.push({ rowNumber, errors, data: row });
