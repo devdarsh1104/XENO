@@ -126,8 +126,11 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
     const sessionDir = path.join(UPLOADS_ROOT, sessionId);
     fs.mkdirSync(sessionDir, { recursive: true });
 
+    // Extract headers from the raw uploaded file
+    const headers = rawRows.length > 0 ? Object.keys(rawRows[0]) : [];
+
     // 1. Write cleaned_validated_output.csv
-    const cleanedCsvContent = Papa.unparse(validRows);
+    const cleanedCsvContent = Papa.unparse({ fields: headers, data: validRows });
     const cleanedPath = path.join(sessionDir, 'cleaned_validated_output.csv');
     fs.writeFileSync(cleanedPath, cleanedCsvContent, 'utf8');
 
@@ -141,7 +144,8 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
         ...res.data
       }))
     );
-    const errorsCsvContent = Papa.unparse(errorRowsForCsv);
+    const errorHeaders = ['Row Number', 'Field Name', 'Invalid Value', 'Error Reason', ...headers];
+    const errorsCsvContent = Papa.unparse({ fields: errorHeaders, data: errorRowsForCsv });
     const errorsPath = path.join(sessionDir, 'validation_errors.csv');
     fs.writeFileSync(errorsPath, errorsCsvContent, 'utf8');
 
@@ -161,7 +165,7 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
       const start = i * chunkSize;
       const end = start + chunkSize;
       const chunkRows = validRows.slice(start, end);
-      const chunkCsvContent = Papa.unparse(chunkRows);
+      const chunkCsvContent = Papa.unparse({ fields: headers, data: chunkRows });
       
       const chunkFileName = `chunk_${i + 1}.csv`;
       const chunkPath = path.join(chunkDir, chunkFileName);
