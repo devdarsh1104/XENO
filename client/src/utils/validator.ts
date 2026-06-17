@@ -12,7 +12,6 @@ export const validateCSV = async (
     Papa.parse(file, {
       header: true,
       skipEmptyLines: 'greedy',
-      transformHeader: (header) => header.trim().toLowerCase().replace(/^\uFEFF/, ''),
       complete: async (results) => {
         try {
           const rawRows = results.data as any[];
