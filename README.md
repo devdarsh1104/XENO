@@ -8,6 +8,9 @@ An end-to-end web-based platform for uploading, validating, chunking, and downlo
 - **Validation**: Comprehensive rules mapping spanning missing required fields, country-specific phone formatting, date and time format verification, calculated amount precision tolerance checks, and duplicate unique-key detection.
 - **Download Actions**: Seamless download interface for retrieving Cleaned data, Error summaries, and complete ZIP packages.
 
+## Live Application
+**Hosted Product URL:** [https://xeno-u5jd-git-main-devdarsh1104s-projects.vercel.app/](https://xeno-u5jd-git-main-devdarsh1104s-projects.vercel.app/)
+
 ## Tech Stack
 - Frontend: React 19, TypeScript, Vite, Tailwind CSS v4, Axios, Lucide React
 - Backend: Node.js, Express, TypeScript, Multer, Papaparse, Archiver
