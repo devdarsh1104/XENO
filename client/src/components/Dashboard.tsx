@@ -20,11 +20,15 @@ export default function Dashboard({ summary, onReset }: DashboardProps) {
   const [activeTab, setActiveTab] = useState<'errors' | 'valid'>('errors');
 
   const handleDownload = (fileType: string) => {
-    if (fileType === 'zip' && summary.zipBase64) {
-      const link = document.createElement('a');
-      link.href = `data:application/zip;base64,${summary.zipBase64}`;
-      link.download = 'transaction_validation_package.zip';
-      link.click();
+    if (fileType === 'zip') {
+      if (summary.zipBase64) {
+        const link = document.createElement('a');
+        link.href = `data:application/zip;base64,${summary.zipBase64}`;
+        link.download = 'transaction_validation_package.zip';
+        link.click();
+      } else {
+        alert('Vercel Serverless Error: The ZIP payload was dropped by the server. Please Hard Refresh (Cmd+Shift+R) and re-upload.');
+      }
       return;
     }
     window.open(`${API_BASE_URL}/api/download/${summary.sessionId}/${fileType}`, '_blank');
