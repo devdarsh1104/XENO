@@ -68,7 +68,7 @@ export default function FileUpload({ onUploadSuccess }: FileUploadProps) {
     formData.append('chunkSize', chunkSize.toString());
 
     try {
-      const response = await axios.post<ValidationSummary>('http://localhost:5001/api/upload', formData, {
+      const response = await axios.post<ValidationSummary>(`${API_BASE_URL}/api/upload`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         onUploadProgress: (progressEvent) => {
           if (progressEvent.total) {
