@@ -38,22 +38,34 @@ function App() {
 
   return (
     <ErrorBoundary>
-      <div className="min-h-screen bg-slate-50 font-sans">
-        <header className="bg-white border-b border-slate-200">
+      <div className="min-h-screen text-slate-100 font-sans selection:bg-cyan-500/30 selection:text-cyan-50">
+        <header className="sticky top-0 z-50 border-b border-white/5 bg-black/20 backdrop-blur-xl">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <div className="text-slate-800">
-                <ShieldCheck size={24} strokeWidth={2.5} />
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#4facfe] to-[#00f2fe] p-[1px]">
+                <div className="w-full h-full rounded-xl bg-black/50 flex items-center justify-center backdrop-blur-sm">
+                  <ShieldCheck size={22} className="text-cyan-400 drop-shadow-[0_0_8px_rgba(0,242,254,0.5)]" />
+                </div>
               </div>
               <div>
-                <h1 className="text-xl font-semibold text-slate-900 tracking-tight leading-none">DataFlow Validator</h1>
-                <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider mt-0.5">By Devdarsh (Latest)</p>
+                <h1 className="text-xl font-heading font-bold text-white tracking-wide">
+                  DataFlow <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">Validator</span>
+                </h1>
+                <p className="text-[10px] font-semibold text-cyan-500/70 uppercase tracking-[0.2em] mt-0.5 ml-0.5">By Devdarsh (Latest)</p>
               </div>
             </div>
+            {summary && (
+              <button 
+                onClick={() => window.location.reload()}
+                className="text-sm font-medium text-slate-400 hover:text-white transition-colors"
+              >
+                Reset Session
+              </button>
+            )}
           </div>
         </header>
 
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
           {!summary ? (
             <FileUpload onUploadSuccess={(data) => {
               if (typeof data === 'string') {
