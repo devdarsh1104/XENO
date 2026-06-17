@@ -38,8 +38,18 @@ export const validateCSV = async (
               errors.push({ row: rowNumber, field, value, reason });
             };
 
+            const getVal = (row: any, ...keys: string[]) => {
+              const rowKeys = Object.keys(row);
+              for (const searchKey of keys) {
+                const target = searchKey.trim().toLowerCase();
+                const matchedKey = rowKeys.find(k => k.trim().toLowerCase().replace(/^\uFEFF/, '') === target);
+                if (matchedKey && row[matchedKey]) return String(row[matchedKey] || '').trim();
+              }
+              return '';
+            };
+
             // 1. Order ID (Mandatory, unique)
-            const orderId = String(row.order_id || '').trim();
+            const orderId = getVal(row, 'order_id', 'orderid', 'order id');
             if (!orderId) {
               pushError('order_id', 'Missing order_id');
             } else if (uniqueOrderIds.has(orderId)) {
@@ -49,8 +59,8 @@ export const validateCSV = async (
             }
 
             // 2. Customer Phone (Valid Indian number format: 10 digits, starts with 6-9, unique)
-            let phone = String(row.customer_phone || '').trim();
-            let countryCode = String(row.country_code || '').trim();
+            let phone = getVal(row, 'customer_phone', 'customer phone', 'phone', 'phone_number');
+            let countryCode = getVal(row, 'country_code', 'country code', 'countrycode');
             if (phone.startsWith('+91')) {
               phone = phone.replace('+91', '');
               countryCode = '+91';
@@ -61,12 +71,13 @@ export const validateCSV = async (
               pushError('customer_phone', `Duplicate customer_phone: ${phone}`, phone);
             } else {
               uniqueCustomerPhones.add(phone);
-              row.customer_phone = phone; // Normalize
-              row.country_code = countryCode || '+91'; // Ensure country code exists
+              // Store normalized values back with exactly matching dashboard column keys
+              row.customer_phone = phone; 
+              row.country_code = countryCode || '+91'; 
             }
 
             // 3. Signup Date (Format: YYYY-MM-DD or DD/MM/YYYY or MM/DD/YYYY)
-            const rawSignupDate = String(row.signup_date || '').trim();
+            const rawSignupDate = getVal(row, 'signup_date', 'signup date', 'signupdate', 'date');
             if (rawSignupDate) {
               const d1 = /^\d{4}-\d{2}-\d{2}$/.test(rawSignupDate);
               const d2 = /^\d{2}\/\d{2}\/\d{4}$/.test(rawSignupDate);
@@ -80,6 +91,10 @@ export const validateCSV = async (
             } else {
                pushError('signup_date', 'Missing signup_date');
             }
+
+            // Ensure React can read the fields when rendering
+            row.order_id = orderId;
+            row.signup_date = rawSignupDate;
 
             if (errors.length > 0) {
               invalidRows.push({ rowNumber, errors, data: row });

@@ -230,9 +230,10 @@ export default function Dashboard({ summary, onReset }: DashboardProps) {
                       </td>
                       {columns.filter(c => c !== 'rowNumber').map(col => {
                         const hasError = item.errors.some(e => e.field === col);
+                        const dataVal = item.data[col] || item.data[Object.keys(item.data).find(k => k.trim().toLowerCase().replace(/^\uFEFF/, '') === col.toLowerCase()) || ''] || '-';
                         return (
                           <td key={col} className={`px-4 py-2.5 align-top ${hasError ? 'bg-rose-50/50 text-rose-700 font-medium' : 'text-slate-600'}`}>
-                            {item.data[col] || '-'}
+                            {dataVal}
                           </td>
                         );
                       })}
