@@ -1,9 +1,13 @@
 import { TransactionRow, RowValidationResult, ValidationError } from './types';
 import { VALIDATION_CONFIG } from './config';
 
-// Helper to check if string is empty or whitespace
-function isEmpty(val: string | undefined | null): boolean {
-  return val === undefined || val === null || val.trim() === '';
+function safeString(val: any): string {
+  if (val === undefined || val === null) return '';
+  return String(val).trim();
+}
+
+function isEmpty(val: any): boolean {
+  return safeString(val) === '';
 }
 
 // Helper to check if a calendar date is valid (e.g. avoids Feb 31)
@@ -46,7 +50,7 @@ function parseAndValidateDate(dateStr: string): { isValid: boolean; reason?: str
     month = parseInt(parts[1], 10);
     day = parseInt(parts[2], 10);
   }
-  // Try DD/MM/YYYY or MM/DD/YYYY (they share the same slash-delimited numbers format)
+  // Try DD/MM/YYYY or MM/DD/YYYY
   else if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr)) {
     matched = true;
     const parts = dateStr.split('/');
@@ -54,9 +58,7 @@ function parseAndValidateDate(dateStr: string): { isValid: boolean; reason?: str
     const p2 = parseInt(parts[1], 10);
     const p3 = parseInt(parts[2], 10);
 
-    // Try treating p1 as Month, p2 as Day (MM/DD/YYYY)
     const isValidAsMMDD = isValidCalendarDate(p3, p1, p2);
-    // Try treating p1 as Day, p2 as Month (DD/MM/YYYY)
     const isValidAsDDMM = isValidCalendarDate(p3, p2, p1);
 
     if (isValidAsMMDD || isValidAsDDMM) {
@@ -92,14 +94,11 @@ function parseAndValidateDate(dateStr: string): { isValid: boolean; reason?: str
 
 // Time validation helper
 function validateTime(timeStr: string): boolean {
-  // 24h format matches:
-  // HH:mm or HH:mm:ss
   return /^([01]\d|2[0-3]):[0-5]\d(:[0-5]\d)?$/.test(timeStr);
 }
 
 // Phone validator helper
 function validatePhoneNumber(phoneStr: string, countryCode: string): { isValid: boolean; cleaned: string; reason?: string } {
-  // Strip spaces, hyphens, brackets
   const cleaned = phoneStr.replace(/[\s\-\(\)]/g, '');
   
   if (!/^\d+$/.test(cleaned)) {
@@ -137,7 +136,7 @@ export function validateTransactions(rows: TransactionRow[]): RowValidationResul
   const results: RowValidationResult[] = [];
 
   rows.forEach((row, index) => {
-    const rowNumber = index + 1; // 1-indexed line of data row (row index 0 is first data row)
+    const rowNumber = index + 1;
     const errors: ValidationError[] = [];
     let isDuplicate = false;
 
@@ -145,7 +144,7 @@ export function validateTransactions(rows: TransactionRow[]): RowValidationResul
       errors.push({
         row: rowNumber,
         field,
-        value: row[field] || '',
+        value: safeString(row[field]),
         reason
       });
     };
@@ -154,7 +153,7 @@ export function validateTransactions(rows: TransactionRow[]): RowValidationResul
     if (isEmpty(row.order_id)) {
       addError('order_id', 'Order ID is required');
     } else {
-      const orderId = row.order_id.trim();
+      const orderId = safeString(row.order_id);
       if (seenOrderIds.has(orderId)) {
         isDuplicate = true;
         addError('order_id', `Duplicate Order ID: "${orderId}" has already been processed in this file`);
@@ -172,7 +171,7 @@ export function validateTransactions(rows: TransactionRow[]): RowValidationResul
     if (isEmpty(row.country_code)) {
       addError('country_code', 'Country code is required');
     } else {
-      const cc = row.country_code.trim().toUpperCase();
+      const cc = safeString(row.country_code).toUpperCase();
       if (!VALIDATION_CONFIG.phoneRules[cc]) {
         addError('country_code', `Country code "${cc}" is not supported. Supported codes: ${Object.keys(VALIDATION_CONFIG.phoneRules).join(', ')}`);
       }
@@ -182,9 +181,9 @@ export function validateTransactions(rows: TransactionRow[]): RowValidationResul
     if (isEmpty(row.customer_phone)) {
       addError('customer_phone', 'Customer phone is required');
     } else if (!isEmpty(row.country_code)) {
-      const cc = row.country_code.trim().toUpperCase();
+      const cc = safeString(row.country_code).toUpperCase();
       if (VALIDATION_CONFIG.phoneRules[cc]) {
-        const phoneCheck = validatePhoneNumber(row.customer_phone, cc);
+        const phoneCheck = validatePhoneNumber(safeString(row.customer_phone), cc);
         if (!phoneCheck.isValid) {
           addError('customer_phone', phoneCheck.reason || 'Invalid phone number format');
         }
@@ -195,7 +194,7 @@ export function validateTransactions(rows: TransactionRow[]): RowValidationResul
     if (isEmpty(row.order_date)) {
       addError('order_date', 'Order date is required');
     } else {
-      const dateCheck = parseAndValidateDate(row.order_date.trim());
+      const dateCheck = parseAndValidateDate(safeString(row.order_date));
       if (!dateCheck.isValid) {
         addError('order_date', dateCheck.reason || 'Invalid date format');
       }
@@ -205,7 +204,7 @@ export function validateTransactions(rows: TransactionRow[]): RowValidationResul
     if (isEmpty(row.order_time)) {
       addError('order_time', 'Order time is required');
     } else {
-      if (!validateTime(row.order_time.trim())) {
+      if (!validateTime(safeString(row.order_time))) {
         addError('order_time', 'Order time must be in HH:mm or HH:mm:ss 24-hour format');
       }
     }
@@ -225,7 +224,7 @@ export function validateTransactions(rows: TransactionRow[]): RowValidationResul
     if (isEmpty(row.quantity)) {
       addError('quantity', 'Quantity is required');
     } else {
-      const qtyStr = row.quantity.trim();
+      const qtyStr = safeString(row.quantity);
       if (!/^\d+$/.test(qtyStr)) {
         addError('quantity', 'Quantity must be a positive integer (no text or decimals allowed)');
       } else {
@@ -241,7 +240,7 @@ export function validateTransactions(rows: TransactionRow[]): RowValidationResul
     if (isEmpty(row.unit_price)) {
       addError('unit_price', 'Unit price is required');
     } else {
-      const priceStr = row.unit_price.trim();
+      const priceStr = safeString(row.unit_price);
       if (isNaN(Number(priceStr))) {
         addError('unit_price', 'Unit price must be numeric');
       } else {
@@ -257,7 +256,7 @@ export function validateTransactions(rows: TransactionRow[]): RowValidationResul
     if (isEmpty(row.total_amount)) {
       addError('total_amount', 'Total amount is required');
     } else {
-      const totalStr = row.total_amount.trim();
+      const totalStr = safeString(row.total_amount);
       if (isNaN(Number(totalStr))) {
         addError('total_amount', 'Total amount must be numeric');
       } else {
@@ -268,7 +267,7 @@ export function validateTransactions(rows: TransactionRow[]): RowValidationResul
       }
     }
 
-    // 12. quantity * unit_price check (if numeric parsing succeeded)
+    // 12. quantity * unit_price check
     if (qtyNum > 0 && priceNum >= 0 && totalNum >= 0) {
       const calculatedAmount = qtyNum * priceNum;
       const difference = Math.abs(calculatedAmount - totalNum);
@@ -284,7 +283,7 @@ export function validateTransactions(rows: TransactionRow[]): RowValidationResul
     if (isEmpty(row.payment_mode)) {
       addError('payment_mode', 'Payment mode is required');
     } else {
-      const pm = row.payment_mode.trim().toUpperCase();
+      const pm = safeString(row.payment_mode).toUpperCase();
       if (!VALIDATION_CONFIG.allowedPaymentModes.includes(pm)) {
         addError('payment_mode', `Payment mode must be one of: ${VALIDATION_CONFIG.allowedPaymentModes.join(', ')}`);
       }
@@ -295,19 +294,18 @@ export function validateTransactions(rows: TransactionRow[]): RowValidationResul
     if (isEmpty(row.payment_status)) {
       addError('payment_status', 'Payment status is required');
     } else {
-      statusClean = row.payment_status.trim().toUpperCase();
+      status, statusClean = safeString(row.payment_status).toUpperCase();
       if (!VALIDATION_CONFIG.allowedPaymentStatuses.includes(statusClean)) {
         addError('payment_status', `Payment status must be one of: ${VALIDATION_CONFIG.allowedPaymentStatuses.join(', ')}`);
       }
     }
 
-    // 15. transaction_id (required when payment_status is PAID)
-    const txnId = isEmpty(row.transaction_id) ? '' : row.transaction_id.trim();
+    // 15. transaction_id
+    const txnId = isEmpty(row.transaction_id) ? '' : safeString(row.transaction_id);
     if (statusClean === 'PAID' && txnId === '') {
       addError('transaction_id', 'Transaction ID is required when payment status is PAID');
     }
 
-    // If transaction_id is present, check duplicates
     if (txnId !== '') {
       if (seenTransactionIds.has(txnId)) {
         isDuplicate = true;
@@ -321,7 +319,7 @@ export function validateTransactions(rows: TransactionRow[]): RowValidationResul
     if (isEmpty(row.currency)) {
       addError('currency', 'Currency is required');
     } else {
-      const curr = row.currency.trim().toUpperCase();
+      const curr = safeString(row.currency).toUpperCase();
       if (!/^[A-Z]{3}$/.test(curr)) {
         addError('currency', 'Currency must be a valid 3-letter ISO-style code (e.g. USD)');
       }
