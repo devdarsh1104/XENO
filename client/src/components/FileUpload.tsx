@@ -3,6 +3,8 @@ import axios from 'axios';
 import { UploadCloud, FileType, Download, AlertCircle } from 'lucide-react';
 import type { ValidationSummary } from '../types';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+
 interface FileUploadProps {
   onUploadSuccess: (summary: ValidationSummary) => void;
 }
@@ -91,7 +93,7 @@ export default function FileUpload({ onUploadSuccess }: FileUploadProps) {
   };
 
   const handleDownloadSample = () => {
-    window.open('http://localhost:5001/api/sample-csv', '_blank');
+    window.open(`${API_BASE_URL}/api/sample-csv`, '_blank');
   };
 
   return (

@@ -9,6 +9,8 @@ import {
 } from 'lucide-react';
 import type { ValidationSummary } from '../types';
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+
 interface DashboardProps {
   summary: ValidationSummary;
   onReset: () => void;
@@ -18,7 +20,7 @@ export default function Dashboard({ summary, onReset }: DashboardProps) {
   const [activeTab, setActiveTab] = useState<'errors' | 'valid'>('errors');
 
   const handleDownload = (fileType: string) => {
-    window.open(`http://localhost:5001/api/download/${summary.sessionId}/${fileType}`, '_blank');
+    window.open(`${API_BASE_URL}/api/download/${summary.sessionId}/${fileType}`, '_blank');
   };
 
   const columns = [
