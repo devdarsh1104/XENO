@@ -40,4 +40,5 @@ export interface ValidationSummary {
   invalidRowsPreview: InvalidRowPreview[];
   validRowsPreview: TransactionRow[];
   chunkCount: number;
+  zipBase64?: string;
 }

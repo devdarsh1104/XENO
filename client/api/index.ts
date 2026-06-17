@@ -180,6 +180,10 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
     // 4. Create ZIP
     const zipPath = path.join(sessionDir, 'all_files.zip');
     await createZipArchive(zipPath, filesToZip);
+    
+    // Read ZIP to base64 for stateless Serverless download
+    const zipBuffer = fs.readFileSync(zipPath);
+    const zipBase64 = zipBuffer.toString('base64');
 
     // Limit previews to keep JSON payloads lightweight
     const validPreviewLimit = 100;
@@ -198,7 +202,8 @@ app.post('/api/upload', upload.single('file'), async (req, res) => {
         data: r.data
       })),
       validRowsPreview: validRows.slice(0, validPreviewLimit),
-      chunkCount
+      chunkCount,
+      zipBase64
     });
 
   } catch (error: any) {

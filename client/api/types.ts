@@ -41,4 +41,5 @@ export interface ValidationSummary {
   invalidRowsPreview: { rowNumber: number; data: TransactionRow; errors: ValidationError[] }[];
   validRowsPreview: TransactionRow[];
   sessionId: string;
+  zipBase64?: string;
 }
