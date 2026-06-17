@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #0f172a;
+  --color-primary-hover: #1e293b;
+  --color-surface: #ffffff;
+  --color-background: #f8fafc;
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+body {
+  background-color: var(--color-background);
+  color: #0f172a;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer utilities {
+  .saas-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+  
+  .saas-button {
+    background: #0f172a;
+    color: #ffffff;
+    font-weight: 500;
+    transition: all 0.15s ease;
+  }
+  
+  .saas-button:hover {
+    background: #334155;
+  }
+  
+  .saas-button-outline {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    color: #334155;
+    font-weight: 500;
+    transition: all 0.15s ease;
+  }
+  
+  .saas-button-outline:hover {
+    background: #f8fafc;
+    border-color: #94a3b8;
+  }
+}
