@@ -86,24 +86,21 @@ export default function FileUpload({ onUploadSuccess }: FileUploadProps) {
 
   return (
     <div className="w-full max-w-xl mx-auto mt-6">
-      <div className="mb-8 text-center">
-        <h2 className="text-3xl font-heading font-bold text-white mb-2 tracking-wide">Upload Data</h2>
-        <p className="text-slate-400 text-sm">Select a CSV dataset to process and validate.</p>
+      <div className="mb-10 text-center">
+        <h2 className="text-4xl font-heading font-medium text-[#232220] mb-3">Upload Data</h2>
+        <p className="text-[#6b6a65] text-sm">Select a CSV dataset to process and validate.</p>
       </div>
 
-      <div className="glass-panel rounded-2xl p-8 relative overflow-hidden">
-        {/* Subtle background glow effect inside the panel */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-32 bg-cyan-500/10 blur-[50px] pointer-events-none"></div>
-
+      <div className="editorial-panel p-10">
         <div 
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
           onDrop={handleDrop}
           onClick={() => !isUploading && fileInputRef.current?.click()}
-          className={`relative border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition-all duration-300 ease-out z-10 ${
+          className={`relative border border-dashed rounded-xl p-10 text-center cursor-pointer transition-all duration-300 ease-out ${
             isDragging 
-              ? 'border-cyan-400 bg-cyan-500/5 shadow-[0_0_30px_rgba(0,242,254,0.15)]' 
-              : 'border-white/10 hover:border-cyan-500/50 hover:bg-white/5'
+              ? 'border-[#4a6755] bg-[#e8edea]' 
+              : 'border-[#d1bfae] hover:border-[#4a6755] hover:bg-[#fcfbf9]'
           } ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}
         >
           <input 
@@ -114,30 +111,30 @@ export default function FileUpload({ onUploadSuccess }: FileUploadProps) {
             onChange={handleFileChange}
           />
           
-          <div className="flex justify-center mb-5">
-            <div className={`p-4 rounded-full transition-colors duration-300 ${isDragging ? 'bg-cyan-500/20 text-cyan-400' : 'bg-white/5 text-slate-300 group-hover:text-cyan-400 group-hover:bg-cyan-500/10'}`}>
-              {file ? <FileType size={32} className="text-cyan-400 drop-shadow-[0_0_8px_rgba(0,242,254,0.5)]" /> : <UploadCloud size={32} />}
+          <div className="flex justify-center mb-6">
+            <div className={`p-4 rounded-full transition-colors duration-300 ${isDragging ? 'bg-[#4a6755] text-white' : 'bg-[#f5f4ef] text-[#4a6755] group-hover:bg-[#e8edea]'}`}>
+              {file ? <FileType size={32} /> : <UploadCloud size={32} />}
             </div>
           </div>
           
-          <h3 className="text-base font-semibold text-white mb-1.5 tracking-wide">
+          <h3 className="text-base font-semibold text-[#232220] mb-2">
             {file ? file.name : "Click to upload or drag and drop"}
           </h3>
-          <p className="text-slate-400 text-sm font-medium">
+          <p className="text-[#6b6a65] text-sm">
             {file ? `${(file.size / 1024).toFixed(1)} KB` : "CSV files up to 10MB"}
           </p>
         </div>
 
         {errorMsg && (
-          <div className="mt-6 p-4 bg-rose-500/10 text-rose-400 rounded-lg flex items-start border border-rose-500/20 shadow-[0_0_15px_rgba(244,63,94,0.1)] relative z-10">
+          <div className="mt-6 p-4 bg-[#fbeae7] text-[#c26d5c] rounded-lg flex items-start border border-[#f5dcd7]">
             <AlertCircle size={18} className="mr-3 flex-shrink-0 mt-0.5" />
             <p className="text-sm font-medium leading-relaxed">{errorMsg}</p>
           </div>
         )}
 
-        <div className="mt-8 space-y-6 relative z-10">
+        <div className="mt-10 space-y-8">
           <div>
-            <label htmlFor="chunkSize" className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-2">
+            <label htmlFor="chunkSize" className="block text-xs font-semibold text-[#6b6a65] uppercase tracking-widest mb-3">
               Rows per Output Chunk
             </label>
             <input 
@@ -146,7 +143,7 @@ export default function FileUpload({ onUploadSuccess }: FileUploadProps) {
               min="1"
               value={chunkSize}
               onChange={(e) => setChunkSize(parseInt(e.target.value) || 1000)}
-              className="w-full px-4 py-3 bg-black/40 border border-white/10 rounded-lg text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all shadow-inner"
+              className="w-full px-4 py-3 bg-[#fcfbf9] border border-[rgba(0,0,0,0.08)] rounded-lg text-sm text-[#232220] focus:outline-none focus:border-[#4a6755] focus:ring-1 focus:ring-[#4a6755] transition-all"
               disabled={isUploading}
             />
           </div>
@@ -154,10 +151,10 @@ export default function FileUpload({ onUploadSuccess }: FileUploadProps) {
           <button 
             onClick={handleUpload}
             disabled={!file || isUploading}
-            className={`w-full py-3.5 rounded-lg text-sm flex items-center justify-center transition-all duration-300 ${
+            className={`w-full py-4 text-sm flex items-center justify-center transition-all duration-300 ${
               !file || isUploading 
-                ? 'bg-white/5 text-slate-500 cursor-not-allowed border border-white/5' 
-                : 'neon-button'
+                ? 'bg-[#e2e1dc] text-[#9a9891] rounded-full cursor-not-allowed' 
+                : 'editorial-button'
             }`}
           >
             {isUploading ? `Processing Data... ${uploadProgress}%` : 'Upload & Validate'}
@@ -165,10 +162,10 @@ export default function FileUpload({ onUploadSuccess }: FileUploadProps) {
         </div>
 
         {isUploading && (
-          <div className="mt-6 relative z-10">
-            <div className="w-full bg-black/40 rounded-full h-2 overflow-hidden border border-white/5 shadow-inner">
+          <div className="mt-6">
+            <div className="w-full bg-[#f5f4ef] rounded-full h-1.5 overflow-hidden">
               <div 
-                className="bg-gradient-to-r from-blue-500 to-cyan-400 h-2 rounded-full transition-all duration-300 ease-out shadow-[0_0_10px_rgba(0,242,254,0.5)]"
+                className="bg-[#4a6755] h-1.5 rounded-full transition-all duration-300 ease-out"
                 style={{ width: `${uploadProgress}%` }}
               ></div>
             </div>
@@ -176,12 +173,12 @@ export default function FileUpload({ onUploadSuccess }: FileUploadProps) {
         )}
       </div>
 
-      <div className="mt-8 text-center">
+      <div className="mt-10 text-center">
         <button 
           onClick={handleDownloadSample}
-          className="text-xs font-semibold uppercase tracking-wider text-slate-400 hover:text-cyan-400 inline-flex items-center transition-colors duration-300 hover:drop-shadow-[0_0_8px_rgba(0,242,254,0.5)]"
+          className="text-xs font-semibold uppercase tracking-widest text-[#a19f99] hover:text-[#4a6755] inline-flex items-center transition-colors duration-300"
         >
-          <Download size={14} className="mr-2" />
+          <Download size={16} className="mr-2" />
           Download Sample Dataset
         </button>
       </div>

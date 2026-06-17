@@ -54,23 +54,23 @@ export default function Dashboard({ summary, onReset }: DashboardProps) {
   ];
 
   return (
-    <div className="w-full space-y-8">
+    <div className="w-full space-y-10">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative z-10">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
         <div>
-          <h2 className="text-3xl font-heading font-bold text-white tracking-wide">Validation Results</h2>
-          <p className="text-sm text-slate-400 mt-1">Review the processed data and export your chunks.</p>
+          <h2 className="text-4xl font-heading font-medium text-[#232220]">Validation Results</h2>
+          <p className="text-sm text-[#6b6a65] mt-2">Review the processed data and export your chunks.</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
           <button 
             onClick={onReset}
-            className="neon-button-outline px-5 py-2.5 rounded-lg text-sm inline-flex items-center"
+            className="editorial-button-outline px-6 py-2.5 text-sm inline-flex items-center"
           >
             <ArrowLeft size={16} className="mr-2" /> Start Over
           </button>
           <button 
             onClick={() => handleDownload('zip')}
-            className="neon-button px-5 py-2.5 rounded-lg text-sm inline-flex items-center"
+            className="editorial-button px-6 py-2.5 text-sm inline-flex items-center"
           >
             <Archive size={16} className="mr-2" /> Download ZIP
           </button>
@@ -78,54 +78,50 @@ export default function Dashboard({ summary, onReset }: DashboardProps) {
       </div>
 
       {/* KPIs */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative z-10">
-        <div className="glass-panel p-6 rounded-2xl border-l-[3px] border-l-slate-400 overflow-hidden relative group">
-          <div className="absolute -right-4 -top-4 w-24 h-24 bg-slate-500/10 rounded-full blur-2xl group-hover:bg-slate-500/20 transition-all"></div>
-          <p className="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3">Total Rows</p>
-          <div className="flex items-end justify-between">
-            <h3 className="text-4xl font-heading font-bold text-white leading-none">{summary.totalRows}</h3>
-            <Database size={24} className="text-slate-500/50" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="editorial-panel p-8 flex flex-col justify-between">
+          <div className="flex items-start justify-between mb-6">
+            <p className="text-[10px] font-bold text-[#a19f99] uppercase tracking-widest">Total Rows</p>
+            <Database size={20} className="text-[#d1bfae]" />
           </div>
+          <h3 className="text-5xl font-heading font-medium text-[#232220]">{summary.totalRows}</h3>
         </div>
 
-        <div className="glass-panel p-6 rounded-2xl border-l-[3px] border-l-emerald-400 overflow-hidden relative group">
-          <div className="absolute -right-4 -top-4 w-24 h-24 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all"></div>
-          <p className="text-[11px] font-bold text-emerald-400 uppercase tracking-widest mb-3">Valid Rows</p>
-          <div className="flex items-end justify-between">
-            <h3 className="text-4xl font-heading font-bold text-white leading-none drop-shadow-[0_0_15px_rgba(16,185,129,0.3)]">{summary.validRowsCount}</h3>
-            <CheckCircle2 size={24} className="text-emerald-400/50" />
+        <div className="editorial-panel p-8 flex flex-col justify-between">
+          <div className="flex items-start justify-between mb-6">
+            <p className="text-[10px] font-bold text-[#4a6755] uppercase tracking-widest">Valid Rows</p>
+            <CheckCircle2 size={20} className="text-[#4a6755]" />
           </div>
+          <h3 className="text-5xl font-heading font-medium text-[#4a6755]">{summary.validRowsCount}</h3>
         </div>
 
-        <div className="glass-panel p-6 rounded-2xl border-l-[3px] border-l-rose-500 overflow-hidden relative group">
-          <div className="absolute -right-4 -top-4 w-24 h-24 bg-rose-500/10 rounded-full blur-2xl group-hover:bg-rose-500/20 transition-all"></div>
-          <p className="text-[11px] font-bold text-rose-500 uppercase tracking-widest mb-3">Invalid Rows</p>
-          <div className="flex items-end justify-between">
-            <h3 className="text-4xl font-heading font-bold text-white leading-none drop-shadow-[0_0_15px_rgba(244,63,94,0.3)]">{summary.invalidRowsCount}</h3>
-            <XCircle size={24} className="text-rose-500/50" />
+        <div className="editorial-panel p-8 flex flex-col justify-between">
+          <div className="flex items-start justify-between mb-6">
+            <p className="text-[10px] font-bold text-[#c26d5c] uppercase tracking-widest">Invalid Rows</p>
+            <XCircle size={20} className="text-[#c26d5c]" />
           </div>
+          <h3 className="text-5xl font-heading font-medium text-[#c26d5c]">{summary.invalidRowsCount}</h3>
         </div>
 
-        <div className="glass-panel p-6 rounded-2xl border-l-[3px] border-l-amber-500 overflow-hidden relative group">
-          <div className="absolute -right-4 -top-4 w-24 h-24 bg-amber-500/10 rounded-full blur-2xl group-hover:bg-amber-500/20 transition-all"></div>
-          <p className="text-[11px] font-bold text-amber-500 uppercase tracking-widest mb-3">Duplicates</p>
-          <div className="flex items-end justify-between">
-            <h3 className="text-4xl font-heading font-bold text-white leading-none drop-shadow-[0_0_15px_rgba(245,158,11,0.3)]">{summary.duplicateRowsCount}</h3>
-            <AlertTriangle size={24} className="text-amber-500/50" />
+        <div className="editorial-panel p-8 flex flex-col justify-between">
+          <div className="flex items-start justify-between mb-6">
+            <p className="text-[10px] font-bold text-[#d1bfae] uppercase tracking-widest">Duplicates</p>
+            <AlertTriangle size={20} className="text-[#d1bfae]" />
           </div>
+          <h3 className="text-5xl font-heading font-medium text-[#232220]">{summary.duplicateRowsCount}</h3>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 relative z-10">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Error Distribution */}
-        <div className="glass-panel rounded-2xl lg:col-span-1 flex flex-col">
-          <div className="p-5 border-b border-white/5">
-            <h3 className="text-sm font-heading font-semibold text-white tracking-wide">Error Distribution</h3>
+        <div className="editorial-panel lg:col-span-1 flex flex-col overflow-hidden">
+          <div className="p-6 border-b border-[rgba(0,0,0,0.04)] bg-[#fcfbf9]/50">
+            <h3 className="text-base font-heading font-medium text-[#232220]">Error Distribution</h3>
           </div>
-          <div className="p-5 flex-1 overflow-y-auto max-h-[300px]">
+          <div className="p-6 flex-1 overflow-y-auto max-h-[320px]">
             {Object.keys(summary.errorsByField).length === 0 ? (
               <div className="h-full flex items-center justify-center">
-                <p className="text-slate-500 text-sm">No errors found.</p>
+                <p className="text-[#a19f99] text-sm">No errors found.</p>
               </div>
             ) : (
               <ul className="space-y-4">
@@ -133,8 +129,8 @@ export default function Dashboard({ summary, onReset }: DashboardProps) {
                   .sort((a, b) => b[1] - a[1])
                   .map(([field, count]) => (
                   <li key={field} className="flex justify-between items-center text-sm group">
-                    <span className="font-mono text-cyan-100 bg-cyan-950/40 border border-cyan-800/50 px-2.5 py-1 rounded text-xs group-hover:bg-cyan-900/40 transition-colors">{field}</span>
-                    <span className="text-rose-400 text-xs font-bold bg-rose-950/30 px-2 py-1 rounded border border-rose-900/30">{count}</span>
+                    <span className="font-mono text-[#6b6a65] bg-[#f5f4ef] border border-[#e2e1dc] px-3 py-1.5 rounded-md text-xs">{field}</span>
+                    <span className="text-[#c26d5c] text-xs font-bold bg-[#fbeae7] px-2.5 py-1 rounded-md border border-[#f5dcd7]">{count}</span>
                   </li>
                 ))}
               </ul>
@@ -143,44 +139,44 @@ export default function Dashboard({ summary, onReset }: DashboardProps) {
         </div>
 
         {/* Action Panel */}
-        <div className="glass-panel rounded-2xl lg:col-span-2">
-           <div className="p-5 border-b border-white/5">
-            <h3 className="text-sm font-heading font-semibold text-white tracking-wide">Exports</h3>
+        <div className="editorial-panel lg:col-span-2 overflow-hidden">
+           <div className="p-6 border-b border-[rgba(0,0,0,0.04)] bg-[#fcfbf9]/50">
+            <h3 className="text-base font-heading font-medium text-[#232220]">Exports</h3>
           </div>
-          <div className="p-5 grid grid-cols-1 sm:grid-cols-2 gap-5">
+          <div className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
             <button 
               onClick={() => handleDownload('cleaned')}
               disabled={summary.validRowsCount === 0}
-              className={`p-5 rounded-xl flex items-start text-left transition-all duration-300 border ${
+              className={`p-6 rounded-2xl flex items-start text-left transition-all duration-300 border ${
                 summary.validRowsCount === 0 
-                  ? 'bg-white/5 border-white/5 text-slate-500 cursor-not-allowed' 
-                  : 'bg-black/40 border-white/10 hover:border-emerald-500/30 hover:bg-emerald-500/5 hover:shadow-[0_0_20px_rgba(16,185,129,0.1)] group'
+                  ? 'bg-[#fcfbf9] border-transparent text-[#a19f99] cursor-not-allowed' 
+                  : 'bg-white border-[#e8edea] hover:border-[#4a6755] hover:shadow-[0_4px_20px_rgba(74,103,85,0.08)] group'
               }`}
             >
-              <div className={`p-2 rounded-lg mt-0.5 mr-4 ${summary.validRowsCount === 0 ? 'bg-white/5 text-slate-500' : 'bg-emerald-500/10 text-emerald-400 group-hover:bg-emerald-500/20 group-hover:text-emerald-300 transition-colors'}`}>
-                <CheckCircle2 size={20} />
+              <div className={`p-3 rounded-full mt-0.5 mr-4 ${summary.validRowsCount === 0 ? 'bg-[#f5f4ef] text-[#a19f99]' : 'bg-[#e8edea] text-[#4a6755] group-hover:bg-[#4a6755] group-hover:text-white transition-colors'}`}>
+                <CheckCircle2 size={24} strokeWidth={1.5} />
               </div>
               <div>
-                <h4 className={`text-sm font-bold tracking-wide ${summary.validRowsCount === 0 ? 'text-slate-500' : 'text-white'}`}>Cleaned Dataset</h4>
-                <p className="text-[11px] mt-1.5 text-slate-400 leading-relaxed">Valid rows only. Pre-chunked ({summary.chunkCount}).</p>
+                <h4 className={`text-base font-medium ${summary.validRowsCount === 0 ? 'text-[#a19f99]' : 'text-[#232220]'}`}>Cleaned Dataset</h4>
+                <p className="text-xs mt-2 text-[#6b6a65] leading-relaxed">Valid rows only. Pre-chunked ({summary.chunkCount}).</p>
               </div>
             </button>
 
             <button 
               onClick={() => handleDownload('errors')}
               disabled={summary.invalidRowsCount === 0}
-              className={`p-5 rounded-xl flex items-start text-left transition-all duration-300 border ${
+              className={`p-6 rounded-2xl flex items-start text-left transition-all duration-300 border ${
                 summary.invalidRowsCount === 0 
-                  ? 'bg-white/5 border-white/5 text-slate-500 cursor-not-allowed' 
-                  : 'bg-black/40 border-white/10 hover:border-rose-500/30 hover:bg-rose-500/5 hover:shadow-[0_0_20px_rgba(244,63,94,0.1)] group'
+                  ? 'bg-[#fcfbf9] border-transparent text-[#a19f99] cursor-not-allowed' 
+                  : 'bg-white border-[#fbeae7] hover:border-[#c26d5c] hover:shadow-[0_4px_20px_rgba(194,109,92,0.08)] group'
               }`}
             >
-              <div className={`p-2 rounded-lg mt-0.5 mr-4 ${summary.invalidRowsCount === 0 ? 'bg-white/5 text-slate-500' : 'bg-rose-500/10 text-rose-400 group-hover:bg-rose-500/20 group-hover:text-rose-300 transition-colors'}`}>
-                <XCircle size={20} />
+              <div className={`p-3 rounded-full mt-0.5 mr-4 ${summary.invalidRowsCount === 0 ? 'bg-[#f5f4ef] text-[#a19f99]' : 'bg-[#fbeae7] text-[#c26d5c] group-hover:bg-[#c26d5c] group-hover:text-white transition-colors'}`}>
+                <XCircle size={24} strokeWidth={1.5} />
               </div>
               <div>
-                <h4 className={`text-sm font-bold tracking-wide ${summary.invalidRowsCount === 0 ? 'text-slate-500' : 'text-white'}`}>Error Log</h4>
-                <p className="text-[11px] mt-1.5 text-slate-400 leading-relaxed">Invalid rows appended with error reasons.</p>
+                <h4 className={`text-base font-medium ${summary.invalidRowsCount === 0 ? 'text-[#a19f99]' : 'text-[#232220]'}`}>Error Log</h4>
+                <p className="text-xs mt-2 text-[#6b6a65] leading-relaxed">Invalid rows appended with error reasons.</p>
               </div>
             </button>
           </div>
@@ -188,50 +184,50 @@ export default function Dashboard({ summary, onReset }: DashboardProps) {
       </div>
 
       {/* Data Previews */}
-      <div className="glass-panel rounded-2xl overflow-hidden flex flex-col relative z-10">
-        <div className="flex border-b border-white/5 bg-black/40">
+      <div className="editorial-panel overflow-hidden flex flex-col">
+        <div className="flex border-b border-[rgba(0,0,0,0.04)] bg-[#fcfbf9]">
           <button 
             onClick={() => setActiveTab('errors')}
-            className={`px-6 py-4 text-sm font-heading font-semibold transition-colors duration-300 border-b-[3px] ${
-              activeTab === 'errors' ? 'border-cyan-400 text-white bg-white/5' : 'border-transparent text-slate-400 hover:text-white hover:bg-white/5'
+            className={`px-8 py-5 text-sm font-medium transition-colors duration-300 border-b-[2px] ${
+              activeTab === 'errors' ? 'border-[#232220] text-[#232220] bg-white' : 'border-transparent text-[#6b6a65] hover:text-[#232220] hover:bg-white'
             }`}
           >
-            Issues <span className={`ml-2 px-2 py-0.5 rounded-full text-[10px] ${activeTab === 'errors' ? 'bg-cyan-500/20 text-cyan-300' : 'bg-white/10'}`}>{Math.min(summary.invalidRowsCount, 100)}</span>
+            Issues <span className={`ml-2 px-2.5 py-0.5 rounded-full text-[10px] ${activeTab === 'errors' ? 'bg-[#f5f4ef] text-[#232220]' : 'bg-[#e2e1dc]'}`}>{Math.min(summary.invalidRowsCount, 100)}</span>
           </button>
           <button 
             onClick={() => setActiveTab('valid')}
-            className={`px-6 py-4 text-sm font-heading font-semibold transition-colors duration-300 border-b-[3px] ${
-              activeTab === 'valid' ? 'border-cyan-400 text-white bg-white/5' : 'border-transparent text-slate-400 hover:text-white hover:bg-white/5'
+            className={`px-8 py-5 text-sm font-medium transition-colors duration-300 border-b-[2px] ${
+              activeTab === 'valid' ? 'border-[#232220] text-[#232220] bg-white' : 'border-transparent text-[#6b6a65] hover:text-[#232220] hover:bg-white'
             }`}
           >
-            Clean Data <span className={`ml-2 px-2 py-0.5 rounded-full text-[10px] ${activeTab === 'valid' ? 'bg-cyan-500/20 text-cyan-300' : 'bg-white/10'}`}>{Math.min(summary.validRowsCount, 100)}</span>
+            Clean Data <span className={`ml-2 px-2.5 py-0.5 rounded-full text-[10px] ${activeTab === 'valid' ? 'bg-[#f5f4ef] text-[#232220]' : 'bg-[#e2e1dc]'}`}>{Math.min(summary.validRowsCount, 100)}</span>
           </button>
         </div>
 
-        <div className="overflow-x-auto bg-transparent max-h-[500px]">
+        <div className="overflow-x-auto bg-white max-h-[600px]">
           {activeTab === 'errors' ? (
             summary.invalidRowsPreview.length === 0 ? (
-              <div className="p-12 text-center text-sm text-slate-500">No issues detected in the dataset.</div>
+              <div className="p-16 text-center text-sm text-[#a19f99]">No issues detected in the dataset.</div>
             ) : (
               <table className="w-full text-xs text-left whitespace-nowrap">
-                <thead className="bg-black/60 text-slate-300 border-b border-white/10 sticky top-0 shadow-sm z-10 backdrop-blur-md">
+                <thead className="bg-[#fcfbf9] text-[#6b6a65] border-b border-[rgba(0,0,0,0.06)] sticky top-0 z-10">
                   <tr>
-                    <th className="px-5 py-3 font-semibold tracking-wider uppercase text-[10px]">Row</th>
-                    <th className="px-5 py-3 font-semibold tracking-wider uppercase text-[10px] min-w-[300px]">Error Reasons</th>
+                    <th className="px-6 py-4 font-semibold tracking-widest uppercase text-[10px]">Row</th>
+                    <th className="px-6 py-4 font-semibold tracking-widest uppercase text-[10px] min-w-[300px]">Error Reasons</th>
                     {columns.filter(c => c !== 'rowNumber').map(col => (
-                      <th key={col} className="px-5 py-3 font-semibold tracking-wider uppercase text-[10px]">{col.replace(/_/g, ' ')}</th>
+                      <th key={col} className="px-6 py-4 font-semibold tracking-widest uppercase text-[10px]">{col.replace(/_/g, ' ')}</th>
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/5">
+                <tbody className="divide-y divide-[rgba(0,0,0,0.04)]">
                   {summary.invalidRowsPreview.map((item, i) => (
-                    <tr key={i} className="hover:bg-white/5 transition-colors">
-                      <td className="px-5 py-3.5 font-mono text-slate-300 align-top">{item.rowNumber}</td>
-                      <td className="px-5 py-3.5 align-top">
+                    <tr key={i} className="hover:bg-[#fcfbf9] transition-colors">
+                      <td className="px-6 py-4 font-mono text-[#6b6a65] align-top">{item.rowNumber}</td>
+                      <td className="px-6 py-4 align-top">
                         <div className="flex flex-col gap-2">
                           {item.errors.map((err, idx) => (
-                            <span key={idx} className="text-[10.5px] bg-rose-950/40 text-rose-300 px-2.5 py-1 rounded-md border border-rose-900/50 inline-block w-fit">
-                              <span className="font-bold text-rose-200">{err.field}:</span> {err.reason}
+                            <span key={idx} className="text-[11px] bg-[#fbeae7] text-[#c26d5c] px-3 py-1.5 rounded-md border border-[#f5dcd7] inline-block w-fit">
+                              <span className="font-bold">{err.field}:</span> {err.reason}
                             </span>
                           ))}
                         </div>
@@ -240,7 +236,7 @@ export default function Dashboard({ summary, onReset }: DashboardProps) {
                         const hasError = item.errors.some(e => e.field === col);
                         const dataVal = item.data[col] || item.data[Object.keys(item.data).find(k => k.trim().toLowerCase().replace(/^\uFEFF/, '') === col.toLowerCase()) || ''] || '-';
                         return (
-                          <td key={col} className={`px-5 py-3.5 align-top font-mono ${hasError ? 'bg-rose-500/10 text-rose-300 font-medium' : 'text-slate-400'}`}>
+                          <td key={col} className={`px-6 py-4 align-top font-mono ${hasError ? 'bg-[#fbeae7]/50 text-[#c26d5c] font-medium' : 'text-[#6b6a65]'}`}>
                             {dataVal}
                           </td>
                         );
@@ -252,25 +248,25 @@ export default function Dashboard({ summary, onReset }: DashboardProps) {
             )
           ) : (
             summary.validRowsPreview.length === 0 ? (
-              <div className="p-12 text-center text-sm text-slate-500">No clean rows available to display.</div>
+              <div className="p-16 text-center text-sm text-[#a19f99]">No clean rows available to display.</div>
             ) : (
               <table className="w-full text-xs text-left whitespace-nowrap">
-                <thead className="bg-black/60 text-slate-300 border-b border-white/10 sticky top-0 shadow-sm z-10 backdrop-blur-md">
+                <thead className="bg-[#fcfbf9] text-[#6b6a65] border-b border-[rgba(0,0,0,0.06)] sticky top-0 z-10">
                   <tr>
-                    <th className="px-5 py-3 font-semibold tracking-wider uppercase text-[10px]">Row</th>
+                    <th className="px-6 py-4 font-semibold tracking-widest uppercase text-[10px]">Row</th>
                     {columns.filter(c => c !== 'rowNumber').map(col => (
-                      <th key={col} className="px-5 py-3 font-semibold tracking-wider uppercase text-[10px]">{col.replace(/_/g, ' ')}</th>
+                      <th key={col} className="px-6 py-4 font-semibold tracking-widest uppercase text-[10px]">{col.replace(/_/g, ' ')}</th>
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-white/5">
+                <tbody className="divide-y divide-[rgba(0,0,0,0.04)]">
                   {summary.validRowsPreview.map((item, i) => (
-                    <tr key={i} className="hover:bg-white/5 transition-colors">
-                      <td className="px-5 py-3.5 font-mono text-slate-300">{item.rowNumber}</td>
+                    <tr key={i} className="hover:bg-[#fcfbf9] transition-colors">
+                      <td className="px-6 py-4 font-mono text-[#a19f99]">{item.rowNumber}</td>
                       {columns.filter(c => c !== 'rowNumber').map(col => {
                         const dataVal = item.data[col] || item.data[Object.keys(item.data).find(k => k.trim().toLowerCase().replace(/^\uFEFF/, '') === col.toLowerCase()) || ''] || '-';
                         return (
-                          <td key={col} className="px-5 py-3.5 font-mono text-slate-400">{dataVal}</td>
+                          <td key={col} className="px-6 py-4 font-mono text-[#6b6a65]">{dataVal}</td>
                         );
                       })}
                     </tr>

@@ -38,43 +38,43 @@ function App() {
 
   return (
     <ErrorBoundary>
-      <div className="min-h-screen text-slate-100 font-sans selection:bg-cyan-500/30 selection:text-cyan-50">
-        <header className="sticky top-0 z-50 border-b border-white/5 bg-black/20 backdrop-blur-xl">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#4facfe] to-[#00f2fe] p-[1px]">
-                <div className="w-full h-full rounded-xl bg-black/50 flex items-center justify-center backdrop-blur-sm">
-                  <ShieldCheck size={22} className="text-cyan-400 drop-shadow-[0_0_8px_rgba(0,242,254,0.5)]" />
-                </div>
+      <div className="min-h-screen text-[#232220] font-sans selection:bg-[#d1bfae] selection:text-[#232220]">
+        <header className="sticky top-0 z-50 border-b border-[rgba(0,0,0,0.06)] bg-[#fcfbf9]/80 backdrop-blur-md">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[72px] flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="text-[#4a6755]">
+                <ShieldCheck size={28} strokeWidth={1.5} />
               </div>
-              <div>
-                <h1 className="text-xl font-heading font-bold text-white tracking-wide">
-                  DataFlow <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">Validator</span>
+              <div className="flex flex-col justify-center">
+                <h1 className="text-2xl font-heading font-medium tracking-tight text-[#232220] leading-none">
+                  DataFlow Validator
                 </h1>
-                <p className="text-[10px] font-semibold text-cyan-500/70 uppercase tracking-[0.2em] mt-0.5 ml-0.5">By Devdarsh (Latest)</p>
+                <p className="text-[10px] font-semibold text-[#a19f99] uppercase tracking-widest mt-1">By Devdarsh (Latest)</p>
               </div>
             </div>
             {summary && (
               <button 
                 onClick={() => window.location.reload()}
-                className="text-sm font-medium text-slate-400 hover:text-white transition-colors"
+                className="text-sm font-medium text-[#6b6a65] hover:text-[#4a6755] transition-colors"
               >
-                Reset Session
+                Start New Session
               </button>
             )}
           </div>
         </header>
 
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative z-10">
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
           {!summary ? (
             <FileUpload onUploadSuccess={(data) => {
               if (typeof data === 'string') {
-                throw new Error("API returned an HTML string instead of JSON payload. Vercel backend is missing! HTML Preview: " + (data as string).substring(0, 100));
+                try {
+                  setSummary(JSON.parse(data));
+                } catch (e) {
+                  console.error("Failed to parse string summary", e);
+                }
+              } else {
+                setSummary(data);
               }
-              if (!data || !data.invalidRowsPreview) {
-                throw new Error("API returned invalid JSON data: " + JSON.stringify(data));
-              }
-              setSummary(data);
             }} />
           ) : (
             <Dashboard summary={summary} onReset={() => setSummary(null)} />
