@@ -70,6 +70,7 @@ export default function FileUpload({ onUploadSuccess }: FileUploadProps) {
     try {
       const response = await axios.post<ValidationSummary>(`${API_BASE_URL}/api/upload`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
+        withCredentials: true,
         onUploadProgress: (progressEvent) => {
           if (progressEvent.total) {
             const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
