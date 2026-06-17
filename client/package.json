@@ -10,19 +10,31 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "archiver": "^8.0.0",
     "axios": "^1.18.0",
     "clsx": "^2.1.1",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
     "lucide-react": "^1.20.0",
+    "multer": "^2.2.0",
+    "papaparse": "^5.5.3",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
-    "tailwind-merge": "^3.6.0"
+    "tailwind-merge": "^3.6.0",
+    "uuid": "^14.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@tailwindcss/vite": "^4.3.1",
+    "@types/archiver": "^8.0.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/multer": "^2.1.0",
     "@types/node": "^24.12.3",
+    "@types/papaparse": "^5.5.2",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "@types/uuid": "^10.0.0",
     "@vitejs/plugin-react": "^6.0.1",
     "autoprefixer": "^10.5.0",
     "eslint": "^10.3.0",

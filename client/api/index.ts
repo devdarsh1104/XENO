@@ -18,8 +18,8 @@ const PORT = process.env.PORT || 5001;
 app.use(cors());
 app.use(express.json());
 
-// Set up temporary uploads directory
-const UPLOADS_ROOT = path.join(__dirname, '../uploads');
+// Set up temporary uploads directory (Vercel Serverless ONLY allows writing to /tmp)
+const UPLOADS_ROOT = '/tmp';
 if (!fs.existsSync(UPLOADS_ROOT)) {
   fs.mkdirSync(UPLOADS_ROOT, { recursive: true });
 }
@@ -296,8 +296,5 @@ setInterval(() => {
   });
 }, CLEANUP_INTERVAL);
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`[Server] Transaction Validator backend listening on http://localhost:${PORT}`);
-  console.log(`[Server] Max file upload limit config is: ${VALIDATION_CONFIG.maxFileSize / (1024 * 1024)}MB`);
-});
+// Export the app for Vercel Serverless
+export default app;

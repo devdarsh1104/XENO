@@ -3,7 +3,7 @@ import axios from 'axios';
 import { UploadCloud, FileType, Download, AlertCircle } from 'lucide-react';
 import type { ValidationSummary } from '../types';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+const API_BASE_URL = import.meta.env.PROD ? '' : 'http://localhost:5001';
 
 interface FileUploadProps {
   onUploadSuccess: (summary: ValidationSummary) => void;
