@@ -12,6 +12,7 @@ export const validateCSV = async (
     Papa.parse(file, {
       header: true,
       skipEmptyLines: 'greedy',
+      transformHeader: (header) => header.trim().toLowerCase().replace(/^\uFEFF/, ''),
       complete: async (results) => {
         try {
           const rawRows = results.data as any[];
@@ -83,9 +84,9 @@ export const validateCSV = async (
 
             if (errors.length > 0) {
               invalidRows.push({ rowNumber, errors, data: row });
-              errors.forEach((e) => {
-                errorsByField[e.field] = (errorsByField[e.field] || 0) + 1;
-                if (e.reason.startsWith('Duplicate')) {
+              errors.forEach((err) => {
+                errorsByField[err.field] = (errorsByField[err.field] || 0) + 1;
+                if (err.reason.startsWith('Duplicate')) {
                   duplicateCount++;
                 }
               });
@@ -159,7 +160,7 @@ export const validateCSV = async (
           reject(err);
         }
       },
-      error: (err) => {
+      error: (err: any) => {
         reject(err);
       }
     });
