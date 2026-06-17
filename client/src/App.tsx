@@ -46,7 +46,7 @@ function App() {
               </div>
               <div>
                 <h1 className="text-xl font-semibold text-slate-900 tracking-tight leading-none">DataFlow Validator</h1>
-                <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider mt-0.5">By Devdarsh</p>
+                <p className="text-[11px] font-medium text-slate-500 uppercase tracking-wider mt-0.5">By Devdarsh (Latest)</p>
               </div>
             </div>
           </div>
