@@ -236,11 +236,24 @@ app.get('/api/download/:sessionId/:fileType', (req, res) => {
     return res.status(400).json({ error: 'Invalid download file type requested.' });
   }
 
-  if (!fs.existsSync(filePath)) {
-    return res.status(404).json({ error: 'Requested file does not exist.' });
-  }
+  try {
+    if (!fs.existsSync(filePath)) {
+      return res.status(404).json({ error: 'Requested file does not exist.' });
+    }
 
-  res.download(filePath, downloadName);
+    const stat = fs.statSync(filePath);
+    res.writeHead(200, {
+      'Content-Type': fileType === 'zip' ? 'application/zip' : 'text/csv',
+      'Content-Length': stat.size,
+      'Content-Disposition': `attachment; filename="${downloadName}"`
+    });
+
+    const readStream = fs.createReadStream(filePath);
+    readStream.pipe(res);
+  } catch (error: any) {
+    console.error('Download error:', error);
+    res.status(500).json({ error: 'Failed to download file', details: error.message });
+  }
 });
 
 // Endpoint: Stream sample transaction template CSV
@@ -259,42 +272,6 @@ ORD001,John Doe,9876543210,IN,2026-06-15,14:30:00,PROD101,Wireless Mouse,2,25.00
   }
 });
 
-// Background Cleanup Process: Delete folders older than 1 hour
-const CLEANUP_INTERVAL = 15 * 60 * 1000; // 15 mins
-const MAX_FILE_AGE = 60 * 60 * 1000; // 1 hour
-
-setInterval(() => {
-  fs.readdir(UPLOADS_ROOT, (err, folders) => {
-    if (err) {
-      console.error('Cleanup read directory error:', err);
-      return;
-    }
-
-    const now = Date.now();
-    folders.forEach((folder) => {
-      // Skip the temp directory
-      if (folder === 'temp') return;
-
-      const folderPath = path.join(UPLOADS_ROOT, folder);
-      fs.stat(folderPath, (err, stats) => {
-        if (err) {
-          console.error(`Cleanup stat error for folder ${folder}:`, err);
-          return;
-        }
-
-        if (now - stats.mtime.getTime() > MAX_FILE_AGE) {
-          fs.rm(folderPath, { recursive: true, force: true }, (rmErr) => {
-            if (rmErr) {
-              console.error(`Failed to delete expired session directory: ${folderPath}`, rmErr);
-            } else {
-              console.log(`Cleaned up expired session directory: ${folder}`);
-            }
-          });
-        }
-      });
-    });
-  });
-}, CLEANUP_INTERVAL);
 
 // Export the app for Vercel Serverless
 export default app;
