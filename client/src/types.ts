@@ -38,7 +38,9 @@ export interface ValidationSummary {
   duplicateRowsCount: number;
   errorsByField: Record<string, number>;
   invalidRowsPreview: InvalidRowPreview[];
-  validRowsPreview: TransactionRow[];
+  validRowsPreview: any[];
   chunkCount: number;
   zipBase64?: string;
+  cleanedCsvContent?: string;
+  errorsCsvContent?: string;
 }

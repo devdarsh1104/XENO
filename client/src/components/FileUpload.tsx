@@ -1,9 +1,7 @@
 import { useState, useRef } from 'react';
-import axios from 'axios';
 import { UploadCloud, FileType, Download, AlertCircle } from 'lucide-react';
 import type { ValidationSummary } from '../types';
-
-const API_BASE_URL = import.meta.env.PROD ? '' : 'http://localhost:5001';
+import { validateCSV } from '../utils/validator';
 
 interface FileUploadProps {
   onUploadSuccess: (summary: ValidationSummary) => void;
@@ -68,33 +66,22 @@ export default function FileUpload({ onUploadSuccess }: FileUploadProps) {
     formData.append('chunkSize', chunkSize.toString());
 
     try {
-      const response = await axios.post<ValidationSummary>(`${API_BASE_URL}/api/upload`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-        withCredentials: true,
-        onUploadProgress: (progressEvent) => {
-          if (progressEvent.total) {
-            const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-            setUploadProgress(percentCompleted);
-          }
-        }
+      const summary = await validateCSV(file, chunkSize, (progress) => {
+        setUploadProgress(progress);
       });
       setTimeout(() => {
         setIsUploading(false);
-        onUploadSuccess(response.data);
+        onUploadSuccess(summary);
       }, 300);
     } catch (error: any) {
       setIsUploading(false);
       setUploadProgress(0);
-      if (error.response?.data?.error) {
-        setErrorMsg(error.response.data.error);
-      } else {
-        setErrorMsg('An unexpected error occurred during upload. Please check if the server is running.');
-      }
+      setErrorMsg(error.message || 'An unexpected error occurred during client-side validation.');
     }
   };
 
   const handleDownloadSample = () => {
-    window.open(`${API_BASE_URL}/api/sample-csv`, '_blank');
+    window.location.href = '/sample_transactions.csv';
   };
 
   return (

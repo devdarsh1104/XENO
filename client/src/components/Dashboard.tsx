@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import type { ValidationSummary } from '../types';
 
-const API_BASE_URL = import.meta.env.PROD ? '' : 'http://localhost:5001';
+
 
 interface DashboardProps {
   summary: ValidationSummary;
@@ -20,18 +20,33 @@ export default function Dashboard({ summary, onReset }: DashboardProps) {
   const [activeTab, setActiveTab] = useState<'errors' | 'valid'>('errors');
 
   const handleDownload = (fileType: string) => {
-    if (fileType === 'zip') {
-      if (summary.zipBase64) {
-        const link = document.createElement('a');
-        link.href = `data:application/zip;base64,${summary.zipBase64}`;
-        link.download = 'transaction_validation_package.zip';
-        link.click();
-      } else {
-        alert('Vercel Serverless Error: The ZIP payload was dropped by the server. Please Hard Refresh (Cmd+Shift+R) and re-upload.');
-      }
+    if (fileType === 'zip' && summary.zipBase64) {
+      const link = document.createElement('a');
+      link.href = `data:application/zip;base64,${summary.zipBase64}`;
+      link.download = 'transaction_validation_package.zip';
+      link.click();
       return;
     }
-    window.open(`${API_BASE_URL}/api/download/${summary.sessionId}/${fileType}`, '_blank');
+    
+    if (fileType === 'cleaned' && summary.cleanedCsvContent) {
+      const blob = new Blob([summary.cleanedCsvContent], { type: 'text/csv' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'cleaned_validated_output.csv';
+      link.click();
+      return;
+    }
+
+    if (fileType === 'errors' && summary.errorsCsvContent) {
+      const blob = new Blob([summary.errorsCsvContent], { type: 'text/csv' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'validation_errors.csv';
+      link.click();
+      return;
+    }
+
+    alert('Client-side processing error: File data missing from memory payload.');
   };
 
   const columns = [

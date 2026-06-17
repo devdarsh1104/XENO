@@ -4,7 +4,8 @@ import FileUpload from './components/FileUpload';
 import Dashboard from './components/Dashboard';
 import type { ValidationSummary } from './types';
 
-import React, { Component, ErrorInfo } from 'react';
+import React, { Component } from 'react';
+import type { ErrorInfo } from 'react';
 
 class ErrorBoundary extends Component<{children: React.ReactNode}, {hasError: boolean, error: Error | null}> {
   constructor(props: {children: React.ReactNode}) {
