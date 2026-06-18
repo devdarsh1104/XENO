@@ -38,24 +38,24 @@ function App() {
 
   return (
     <ErrorBoundary>
-      <div className="min-h-screen text-[#232220] font-sans selection:bg-[#d1bfae] selection:text-[#232220]">
-        <header className="sticky top-0 z-50 border-b border-[rgba(0,0,0,0.06)] bg-[#fcfbf9]/80 backdrop-blur-md">
+      <div className="min-h-screen text-[var(--text-charcoal)] font-sans selection:bg-[var(--accent-sand)] selection:text-[var(--text-charcoal)]">
+        <header className="sticky top-0 z-50 border-b border-[var(--border-soft)] bg-[var(--bg-cream)]/80 backdrop-blur-md">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[72px] flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="text-[#4a6755]">
+              <div className="text-[var(--accent-sage)]">
                 <ShieldCheck size={28} strokeWidth={1.5} />
               </div>
               <div className="flex flex-col justify-center">
-                <h1 className="text-2xl font-heading font-medium tracking-tight text-[#232220] leading-none">
+                <h1 className="text-2xl font-heading font-medium tracking-tight text-[var(--text-charcoal)] leading-none">
                   DataFlow Validator
                 </h1>
-                <p className="text-[10px] font-semibold text-[#a19f99] uppercase tracking-widest mt-1">By Devdarsh</p>
+                <p className="text-[10px] font-semibold text-[var(--text-subtle)] uppercase tracking-widest mt-1">By Devdarsh</p>
               </div>
             </div>
             {summary && (
               <button 
                 onClick={() => window.location.reload()}
-                className="text-sm font-medium text-[#6b6a65] hover:text-[#4a6755] transition-colors"
+                className="text-sm font-medium text-[var(--text-muted)] hover:text-[var(--accent-sage)] transition-colors"
               >
                 Start New Session
               </button>
