@@ -101,7 +101,7 @@ export const validateCSV = async (
                 }
               });
             } else {
-              validRows.push(row);
+              validRows.push({ rowNumber, data: row });
             }
             
             // Progress estimation for parsing
@@ -121,7 +121,7 @@ export const validateCSV = async (
             if (chunksFolder) {
               for (let i = 0; i < chunkCount; i++) {
                 const chunkData = validRows.slice(i * chunkSize, (i + 1) * chunkSize);
-                const chunkCsv = Papa.unparse({ fields: headers, data: chunkData });
+                const chunkCsv = Papa.unparse({ fields: headers, data: chunkData.map(r => r.data) });
                 chunksFolder.file(`chunk_${i + 1}.csv`, chunkCsv);
               }
             }
@@ -129,7 +129,7 @@ export const validateCSV = async (
           
           onProgress(70);
 
-          const cleanedCsvContent = Papa.unparse({ fields: headers, data: validRows });
+          const cleanedCsvContent = Papa.unparse({ fields: headers, data: validRows.map(r => r.data) });
           zip.file('cleaned_validated_output.csv', cleanedCsvContent);
 
           const errorsCsvContent = Papa.unparse(invalidRows.map(r => ({
