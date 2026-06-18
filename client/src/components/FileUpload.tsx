@@ -9,7 +9,7 @@ interface FileUploadProps {
 
 export default function FileUpload({ onUploadSuccess }: FileUploadProps) {
   const [file, setFile] = useState<File | null>(null);
-  const [chunkSize, setChunkSize] = useState<number>(1000);
+  const [chunkSize, setChunkSize] = useState<number | string>(1000);
   const [isDragging, setIsDragging] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [isUploading, setIsUploading] = useState(false);
@@ -52,7 +52,11 @@ export default function FileUpload({ onUploadSuccess }: FileUploadProps) {
       setErrorMsg('Only .csv files are supported.');
       return;
     }
-    if (chunkSize < 1) {
+    
+    const parsedChunkSize = typeof chunkSize === 'number' ? chunkSize : parseInt(chunkSize, 10);
+    const finalChunkSize = isNaN(parsedChunkSize) ? 1000 : parsedChunkSize;
+    
+    if (finalChunkSize < 1) {
       setErrorMsg('Chunk size must be at least 1.');
       return;
     }
@@ -63,10 +67,10 @@ export default function FileUpload({ onUploadSuccess }: FileUploadProps) {
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('chunkSize', chunkSize.toString());
+    formData.append('chunkSize', finalChunkSize.toString());
 
     try {
-      const summary = await validateCSV(file, chunkSize, (progress) => {
+      const summary = await validateCSV(file, finalChunkSize, (progress) => {
         setUploadProgress(progress);
       });
       setTimeout(() => {
@@ -142,7 +146,10 @@ export default function FileUpload({ onUploadSuccess }: FileUploadProps) {
               type="number" 
               min="1"
               value={chunkSize}
-              onChange={(e) => setChunkSize(parseInt(e.target.value) || 1000)}
+              onChange={(e) => {
+                const val = e.target.value;
+                setChunkSize(val === '' ? '' : parseInt(val, 10));
+              }}
               className="w-full px-4 py-3 bg-[#fcfbf9] border border-[rgba(0,0,0,0.08)] rounded-lg text-sm text-[#232220] focus:outline-none focus:border-[#4a6755] focus:ring-1 focus:ring-[#4a6755] transition-all"
               disabled={isUploading}
             />
