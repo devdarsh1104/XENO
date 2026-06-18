@@ -6,29 +6,29 @@
 }
 
 :root {
-  --bg-cream: #0f0f0f;
-  --bg-cream-darker: #1a1a1a;
-  --bg-surface: #141414;
+  --bg-cream: #fdfcfaf;
+  --bg-cream-darker: #f5f4ef;
+  --bg-surface: #ffffff;
   
-  --text-charcoal: #f0f0f0;
-  --text-muted: #a0a0a0;
-  --text-subtle: #606060;
+  --text-charcoal: #232220;
+  --text-muted: #6b6a65;
+  --text-subtle: #a19f99;
   
-  --border-soft: rgba(255, 255, 255, 0.08);
-  --border-soft-hover: rgba(255, 255, 255, 0.16);
+  --border-soft: rgba(0, 0, 0, 0.06);
+  --border-soft-hover: rgba(0, 0, 0, 0.12);
   
-  --accent-sage: #5c8069;
-  --accent-sage-hover: #719c81;
-  --accent-sage-light: rgba(92, 128, 105, 0.15);
+  --accent-sage: #4a6755;
+  --accent-sage-hover: #3d5546;
+  --accent-sage-light: #e8edea;
   
-  --accent-terra: #d68475;
-  --accent-terra-light: rgba(214, 132, 117, 0.15);
+  --accent-terra: #c26d5c;
+  --accent-terra-light: #fbeae7;
   
-  --accent-sand: #3a3835;
+  --accent-sand: #d1bfae;
 }
 
 body {
-  background-color: var(--bg-cream);
+  background-color: #fcfbf9;
   color: var(--text-charcoal);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
