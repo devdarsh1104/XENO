@@ -49,7 +49,7 @@ function App() {
                 <h1 className="text-2xl font-heading font-medium tracking-tight text-[#232220] leading-none">
                   DataFlow Validator
                 </h1>
-                <p className="text-[10px] font-semibold text-[#a19f99] uppercase tracking-widest mt-1">By Devdarsh (Latest)</p>
+                <p className="text-[10px] font-semibold text-[#a19f99] uppercase tracking-widest mt-1">By Devdarsh</p>
               </div>
             </div>
             {summary && (
