@@ -9,7 +9,7 @@ An end-to-end web-based platform for uploading, validating, chunking, and downlo
 - **Download Actions**: Seamless download interface for retrieving Cleaned data, Error summaries, and complete ZIP packages.
 
 ## Live Application
-**Hosted Product URL:** [https://xeno-u5jd-git-main-devdarsh1104s-projects.vercel.app/](https://xeno-u5jd-git-main-devdarsh1104s-projects.vercel.app/)
+**Hosted Product URL:** [https://devdarsh1104.github.io/XENO/](https://devdarsh1104.github.io/XENO/)
 
 ## Tech Stack
 - Frontend: React 19, TypeScript, Vite, Tailwind CSS v4, Axios, Lucide React
